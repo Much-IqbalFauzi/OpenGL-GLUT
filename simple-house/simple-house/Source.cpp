@@ -11,6 +11,8 @@ void myInitial() {
 	glLineWidth(2);
 	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthFunc(GL_LEQUAL);
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -137,7 +139,7 @@ void sofa() {
 	kotak_dp(-60, -20, -45, -12, 25); kotak_dp(-60, -20, -45, -12, -5);
 	warna(168, 149, 106);
 	kotak_kk(-57, -12, -5, 0, 25);
-	kotak_kk(-45, -30, -5, -12, 25);
+	kotak_kk(-45, -20, -5, -12, 25);
 	warna(196, 190, 175);
 	kotak_ab(-60, 0, -5, -57, 25);
 	kotak_ab(-57, -12, -5, -45, 25);
@@ -154,19 +156,23 @@ void furniture() {
 void dsp() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
+	gluLookAt(0, 0, 150, 0, 0, 0, 0, 1, 0);
 	glRotatef(xrot, 1, 0, 0);
 	glRotatef(yrot, 0, 1, 0);
 	
 	warna(247, 191, 94);
 	kotak_dp(-60, -20, 60, 20, -30);
-	kotak_dp(-60, -20, 60, 20, 30);
+	kotak_dp(-60, 10, 60, 20, 30);
+	kotak_dp(-60, -20, -30, -10, 30);
+	kotak_dp(-15, -20, 60, -10, 30);
+
+	kotak_dp(-60, -10, -50, 10, 30);
+	kotak_dp(50, -10, 60, 10, 30);
+	kotak_dp(-15, -10, 0, 10, 30);
+	kotak_dp(20, -10, 30, 10, 30);
 
 	warna(135, 81, 30);
 	kotak_dp(-30, -20, -15, 10, 30);
-	warna(141, 227, 208);
-	kotak_dp(-50, -10, -30, 10, 30);
-	kotak_dp(0, -10, 20, 10, 30);
-	kotak_dp(30, -10, 50, 10, 30);
 
 	warna(219, 163, 66);
 	kotak_kk(-60, -20, -30, 20, 30);
@@ -245,6 +251,11 @@ void dsp() {
 	glEnd();
 
 	furniture();
+
+	warna(141, 227, 208, .7);
+	kotak_dp(-50, -10, -30, 10, 30);
+	kotak_dp(0, -10, 20, 10, 30);
+	kotak_dp(30, -10, 50, 10, 30);
 
 	glPopMatrix();
 	glutSwapBuffers();
