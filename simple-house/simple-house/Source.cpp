@@ -1,10 +1,13 @@
 #include <GL/glut.h>
 #include <windows.h>
+#include <stdlib.h>
 float xrot = 0;
 float yrot = 0;
 float xdiff = 0;
 float ydiff = 0;
 bool mousedown = false;
+bool tembok = true;
+int is_depth;
 
 void myInitial() {
 	glClearColor(0, 0, 0, 0);
@@ -16,10 +19,23 @@ void myInitial() {
 	glDepthFunc(GL_LEQUAL);
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	is_depth = 1;
 }
 
 void warna(int r = 1, int g = 1, int b = 1, float a = 1) {
 	glColor4f(r / 255.0f, g / 255.0f, b / 255.0f, a);
+}
+
+void idle() {
+	if (!mousedown)
+	{
+		xrot += 0.3f;
+		yrot += 0.4f;
+	}
+	glutPostRedisplay();
 }
 
 void mouseButton(int button, int state, int x, int y) {
@@ -159,20 +175,22 @@ void dsp() {
 	gluLookAt(0, 0, 150, 0, 0, 0, 0, 1, 0);
 	glRotatef(xrot, 1, 0, 0);
 	glRotatef(yrot, 0, 1, 0);
-	
+
 	warna(247, 191, 94);
+	if (tembok) {
+		kotak_dp(-60, 10, 60, 20, 30);
+		kotak_dp(-60, -20, -30, -10, 30);
+		kotak_dp(-15, -20, 60, -10, 30);
+
+		kotak_dp(-60, -10, -50, 10, 30);
+		kotak_dp(50, -10, 60, 10, 30);
+		kotak_dp(-15, -10, 0, 10, 30);
+		kotak_dp(20, -10, 30, 10, 30);
+
+		warna(135, 81, 30);
+		kotak_dp(-30, -20, -15, 10, 30);
+	}
 	kotak_dp(-60, -20, 60, 20, -30);
-	kotak_dp(-60, 10, 60, 20, 30);
-	kotak_dp(-60, -20, -30, -10, 30);
-	kotak_dp(-15, -20, 60, -10, 30);
-
-	kotak_dp(-60, -10, -50, 10, 30);
-	kotak_dp(50, -10, 60, 10, 30);
-	kotak_dp(-15, -10, 0, 10, 30);
-	kotak_dp(20, -10, 30, 10, 30);
-
-	warna(135, 81, 30);
-	kotak_dp(-30, -20, -15, 10, 30);
 
 	warna(219, 163, 66);
 	kotak_kk(-60, -20, -30, 20, 30);
@@ -252,10 +270,12 @@ void dsp() {
 
 	furniture();
 
-	warna(141, 227, 208, .7);
-	kotak_dp(-50, -10, -30, 10, 30);
-	kotak_dp(0, -10, 20, 10, 30);
-	kotak_dp(30, -10, 50, 10, 30);
+	if (tembok) {
+		warna(141, 227, 208, .7);
+		kotak_dp(-50, -10, -30, 10, 30);
+		kotak_dp(0, -10, 20, 10, 30);
+		kotak_dp(30, -10, 50, 10, 30);
+	}
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -320,6 +340,14 @@ void key(unsigned char k, int x, int y) {
 		case 'U':
 			glRotatef(1.0, 5.0, 0.0, 0.0);
 			break;
+		case '5':
+			if (tembok) {
+				tembok = false;
+			} else {
+				tembok = true;
+			}
+			
+			break;
 	}
 	dsp();
 }
@@ -330,13 +358,14 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(1000, 600);
 	glutInitWindowPosition(133, 84);
 	glutCreateWindow("my house");
-
+	myInitial();
 	glutDisplayFunc(dsp);
 	glutReshapeFunc(aspRR);
 	glutKeyboardFunc(key);
 	glutMouseFunc(mouseButton);
 	glutMotionFunc(mouseMove);
+	glutIdleFunc(dsp);
 
-	myInitial();
 	glutMainLoop();
+	return 0;
 }
